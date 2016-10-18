@@ -1,0 +1,36 @@
+#record( stringout, "$(P)setDisp"){
+#  field( DESC, "write text to disp")
+#  field( VAL,  "DISP:TEXT \"Remote Mode\"")
+#  field( OUT, "$(P)$(W).AOUT")
+#  field( FLNK, "$(P)$(W)")
+#  field( PINI, "YES")
+#}
+record( stringout, "$(P)CMND"){
+  field( DESC, "enter a command")
+  field( FLNK, "$(P)CMND1")
+}
+record( genSub, "$(P)CMND1"){
+  field( DESC, "forward a command")
+  field( SCAN, "Passive")
+  field( SNAM, "agCommand")
+  field( EFLG, "ON CHANGE")
+  field( INPA, "$(P)CMND")
+  field( OUTA, "$(P)$(R).AOUT")
+  field( OUTB, "$(P)$(W).AOUT")
+  field( FLNK, "$(P)$(R)")
+}
+record(asyn,"$(P)$(R)"){
+  field( DTYP, "asynRecordDevice")
+  field( PORT, "$(PORT)")
+  field( ADDR, "$(ADDR)")
+  field( OMAX, "100")
+  field( IMAX, "100")
+  field( FLNK, "$(P)$(W)")
+}
+record(asyn,"$(P)$(W)"){
+  field( DTYP, "asynRecordDevice")
+  field( PORT, "$(PORT)")
+  field( ADDR, "$(ADDR)")
+  field( TMOD, "Write")
+}
+

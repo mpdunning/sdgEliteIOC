@@ -1,0 +1,69 @@
+
+InTerminator=CR LF "Ok" CR LF;
+OutTerminator=CR;
+ExtraInput=Ignore;
+#ReplyTimeout=3000;
+#ReadTimeout=2000;
+
+getStatus       { Separator="," ; out "status?" ; in "%s"    ; }
+getBWDDiodeStat { out "read:sta:bwd?"           ;in "%{0|1}" ; }
+#getTrigMode     { out "read:mode?"        ;in "%{0|1}"         ; }
+#getTrigDiv      { out "read:rate?"        ;in "%i,%*i"         ; }
+#getRFDiv        { out "read:rate?"        ;in "%*i,%i"         ; }
+
+resetBWD        { out "reset"                                ; }
+#getBWDThresh    { out "status?" ; in "%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*f,%*f,%*i,%*i,%*i,%*i,%*i,%f,%*i" ; }
+setBWDThresh    { out "set:bwd:lv %i"                        ; }
+getBWDIntStat   { out "read:bwd?"               ;in "%{0|1}" ; }
+#enableBWDInt    { out "set:bwd:md %{0|1}"                   ; }
+#getTrigFreq     { out "status?" ; in "%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*f,%*f,%i,%*i,%*i,%*i,%*i,%*f,%*i" ; }
+#getCurrRFFreq   { out "status?" ; in "%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*i" ; }
+#getLastRFFreq   { out "status?" ; in "%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*i,%i,%*i,%*i,%*i,%*i,%*i,%*f,%*i" ; }
+#getBWDError     { out "status?" ; in "%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%i,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*i" ; }
+#getBWD1Level     { out "status?" ; in "%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*i,%i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*i" ; }
+#getBWD2Level     { out "status?" ; in "%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*f,%*i,%*i,%*i,%*i,%*f,%*f,%*f,%*f,%*i,%*i,%i,%*i,%*i,%*i,%*i,%*i,%*i,%*i,%*f,%*i" ; }
+
+####
+####
+#getCh1Stat      { out "read:c1?"          ;in "%{0|1},%*{0|1}" ; }
+setCh1          { out "set:c1 %{0|1}"                        ; }
+#getCh1Delay     { out "read:del:c1?"      ;in "%f"             ; }
+setCh1Delay     { out "set:del:c1 %.2f"                      ; }
+##
+#getCh2Stat      { out "read:c2?"          ;in "%{0|1},%*{0|1}" ; }
+setCh2          { out "set:c2 %{0|1}"                        ; }
+#getCh2Delay     { out "read:del:c2?"      ;in "%f"             ; }
+setCh2Delay     { out "set:del:c2 %.2f"                          ; }
+##
+#getCh3Stat      { out "read:c3?"          ;in "%{0|1},%*{0|1}" ; }
+setCh3          { out "set:c3 %{0|1}"                          ; }
+#getCh3Delay     { out "read:del:c3?"      ;in "%f"             ; }
+setCh3Delay     { out "set:del:c3 %.2f"                          ; }
+##
+#getCh4Stat      { out "read:c4?"          ;in "%{0|1},%*{0|1}" ; }
+setCh4          { out "set:c4 %{0|1}"                          ; }
+#getCh4Delay     { out "read:del:c4?"      ;in "%f"             ; }
+setCh4Delay     { out "set:del:c4 %.2f"                          ; }
+##
+#getCh5Stat      { out "read:c5?"          ;in "%{0|1},%*{0|1}" ; }
+setCh5          { out "set:c5 %{0|1}"                          ; }
+#getCh5Delay     { out "read:del:c5?"      ;in "%f"             ; }
+setCh5Delay     { out "set:del:c5 %.2f"                          ; }
+##
+#getCh6Stat      { out "read:c6?"          ;in "%{0|1},%*{0|1}" ; }
+setCh6          { out "set:c6 %{0|1}"                          ; }
+#getCh6Delay     { out "read:del:c6?"      ;in "%f"             ; }
+setCh6Delay     { out "set:del:c6 %.2f"                          ; }
+##
+#getCh7Stat      { out "read:c7?"          ;in "%{0|1},%*{0|1}" ; }
+setCh7          { out "set:c7 %{0|1}"                          ; }
+#getCh7Delay     { out "read:del:c7?"      ;in "%f"             ; }
+setCh7Delay     { out "set:del:c7 %.2f"                          ; }
+##
+#getCh8Stat      { out "read:c8?"          ;in "%{0|1},%*{0|1}" ; }
+setCh8          { out "set:c8 %{0|1}"                          ; }
+#getCh8Delay     { out "read:del:c8?"      ;in "%f"             ; }
+setCh8Delay     { out "set:del:c8 %.2f"                          ; }
+####
+####
+

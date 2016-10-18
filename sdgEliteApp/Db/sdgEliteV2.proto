@@ -1,0 +1,40 @@
+# Use this file if the "Set newline to host" option (set:ser:nl) has not been set. 
+
+InTerminator=CR "\000Ok" CR;
+OutTerminator=CR;
+
+getStatus       { Separator="," ; out "status?" ;in "\000%s"      ; }
+#getBWDDiodeStat { out "read:sta:bwd?"           ;in "\000%{0|1},0,0,%*{0|1},0,0,0,0,0,0,0,0,0,0,0,0"   ; }
+#getBWDIntStat   { out "read:bwd?"               ;in "\000%{0|1|9}" ; }
+
+resetBWD        { out "reset"                                    ; }
+setBWDThresh    { out "set:bwd:lv %i"                            ; }
+
+####
+####
+setCh1          { out "set:c1 %{0|1}"                            ; }
+setCh1Delay     { out "set:del:c1 %.2f"                          ; }
+##
+setCh2          { out "set:c2 %{0|1}"                            ; }
+setCh2Delay     { out "set:del:c2 %.2f"                          ; }
+##
+setCh3          { out "set:c3 %{0|1}"                            ; }
+setCh3Delay     { out "set:del:c3 %.2f"                          ; }
+##
+setCh4          { out "set:c4 %{0|1}"                            ; }
+setCh4Delay     { out "set:del:c4 %.2f"                          ; }
+##
+setCh5          { out "set:c5 %{0|1}"                            ; }
+setCh5Delay     { out "set:del:c5 %.2f"                          ; }
+##
+setCh6          { out "set:c6 %{0|1}"                            ; }
+setCh6Delay     { out "set:del:c6 %.2f"                          ; }
+##
+setCh7          { out "set:c7 %{0|1}"                            ; }
+setCh7Delay     { out "set:del:c7 %.2f"                          ; }
+##
+setCh8          { out "set:c8 %{0|1}"                            ; }
+setCh8Delay     { out "set:del:c8 %.2f"                          ; }
+####
+####
+
