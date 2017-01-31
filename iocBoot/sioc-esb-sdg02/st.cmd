@@ -11,13 +11,12 @@ dbLoadDatabase "dbd/sdgElite.dbd"
 sdgElite_registerRecordDeviceDriver pdbbase
 
 epicsEnvSet("P","ESB:SDG02")
-drvAsynIPPortConfigure ("L0","ts-esb-06:2005",0,0,0)
+drvAsynIPPortConfigure("L0", "ts-esb-06:2005", 0, 0, 0)
 
-#asynSetTraceMask("L0",-1,0x9)
-#asynSetTraceIOMask("L0",-1,0x2)
+#asynSetTraceMask("L0", -1, 0x9)
+#asynSetTraceIOMask("L0", -1, 0x2)
 
-dbLoadRecords("db/sdgElite.db","IOCNAME=${IOC},P=ESB:SDG02,PORT=P0,L=L0,A=0,PROTOFILE=$(PROTOFILE)")
-dbLoadRecords("db/sdgElite-8.db","P=ESB:SDG02,PORT=P0,L=L0,A=0,PROTOFILE=$(PROTOFILE)")
+dbLoadRecords("db/sdgElite.db", "IOCNAME=${IOC}, P=ESB:SDG02, PORT=P0, L=L0, A=0, PROTOFILE=$(PROTOFILE)")
 
 cd ${TOP}/iocBoot/${IOC}
 iocInit()

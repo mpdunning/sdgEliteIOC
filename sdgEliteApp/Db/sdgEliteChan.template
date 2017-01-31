@@ -1,0 +1,76 @@
+
+#--- Chan $(N) Enable/Disable --------------------------
+record(bo, "$(P):BO:SC:CH$(N)"){
+  field(DESC, "Ch$(N) Enable")
+  field(ZNAM, "Disable")
+  field(ONAM, "Enable")
+  field(OUT,  "$(P):BO:CH$(N) PP")
+#  field(FLNK, "$(P):BI:CH$(N)")
+  field(FLNK, "$(P):WF:STATUS")
+}
+record(bo, "$(P):BO:CH$(N)"){
+  field(ZNAM, "Disable")
+  field(ONAM, "Enable")
+  field(SDIS, "$(P):BO:CH$(N):Sync.PACT")
+  field(DISV, "1")
+  field(DTYP, "stream")
+  field(OUT,  "@$(PROTOFILE) setCh($(N)) $(L) $(A)")
+}
+record(bi, "$(P):BI:CH$(N)"){
+#  field(DTYP, "stream")
+  field(ZNAM, "Disabled")
+  field(ONAM, "Enabled")
+  field(ZSV,  "NO_ALARM")
+  field(OSV,  "MAJOR")
+  field(INP,  "$(P):AS:CHAN.VAL$(S)")
+#  field(INP,  "@$(PROTOFILE) getCh($(N)) $(L) $(A)")
+  field(FLNK, "$(P):BO:CH$(N):Sync")
+#  field(PINI, "1")
+#  field(SCAN, "5 second")
+}
+record(bo, "$(P):BO:CH$(N):Sync"){
+  field(DOL,  "$(P):BI:CH$(N) NPP")
+  field(OMSL, "closed_loop")
+  field(OUT,  "$(P):BO:SC:CH$(N) PP")
+}
+
+#--- Chan $(N) Delay --------------------------
+record(ao, "$(P):AO:SC:CH$(N):DELAY"){
+  field(DESC, "Ch$(N) Delay")
+  field(PREC, "2")
+  field(DRVH, "817611")
+  field(DRVL, "0")
+  field(HOPR, "817611")
+  field(LOPR, "0")
+  field(OUT,  "$(P):AO:CH$(N):DELAY PP")
+#  field(FLNK, "$(P):AI:CH$(N):DELAY")
+  field(FLNK, "$(P):WF:STATUS")
+}
+record(ao, "$(P):AO:CH$(N):DELAY"){
+  field(SDIS, "$(P):AO:CH$(N):DELAY:Sync.PACT")
+  field(DISV, "1")
+  field(DTYP, "stream")
+  field(OUT,  "@$(PROTOFILE) setDelay($(N)) $(L) $(A)")
+  field(PREC, "2")
+  field(DRVH, "817611")
+  field(DRVL, "0")
+  field(HOPR, "817611")
+  field(LOPR, "0")
+}
+record(ai, "$(P):AI:CH$(N):DELAY"){
+#  field(DTYP, "stream")
+  field(INP,  "$(P):AS:DELAY.VAL$(S)")
+#  field(INP,  "@$(PROTOFILE) getDelay($(N)) $(L) $(A)")
+  field(PREC, "2")
+  field(EGU,  "ns")
+  field(FLNK, "$(P):AO:CH$(N):DELAY:Sync")
+#  field(PINI, "1")
+#  field(SCAN, "5 second")
+}
+record(ao, "$(P):AO:CH$(N):DELAY:Sync"){
+  field(DOL,  "$(P):AI:CH$(N):DELAY NPP")
+  field(OMSL, "closed_loop")
+  field(OUT,  "$(P):AO:SC:CH$(N):DELAY PP")
+  field(PREC, "2")
+}
+

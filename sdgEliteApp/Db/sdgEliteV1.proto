@@ -1,40 +1,89 @@
 # Use this file if the "Set newline to host" option (set:ser:nl) has been set.
 
-InTerminator=CR LF "Ok" CR LF;
-OutTerminator=CR;
+# This device can mix up send/receive strings.  Using the @mismatch handlers fixes it.
+# Fixed 12/8/16 md
 
-getStatus       { Separator="," ; out "status?" ;in "%s"     ; }
-#getBWDDiodeStat { out "read:sta:bwd?"           ;in "%{0|1}" ; }
-#getBWDIntStat   { out "read:bwd?"               ;in "%{0|1}" ; }
+InTerminator = "Ok\r\n";
+OutTerminator = "\r";
 
-resetBWD        { out "reset"                                ; }
-setBWDThresh    { out "set:bwd:lv %i"                        ; }
+stausMismatch = "status?\r";
 
-####
-####
-setCh1          { out "set:c1 %{0|1}"                        ; }
-setCh1Delay     { out "set:del:c1 %.2f"                      ; }
-##
-setCh2          { out "set:c2 %{0|1}"                        ; }
-setCh2Delay     { out "set:del:c2 %.2f"                      ; }
-##
-setCh3          { out "set:c3 %{0|1}"                        ; }
-setCh3Delay     { out "set:del:c3 %.2f"                      ; }
-##
-setCh4          { out "set:c4 %{0|1}"                        ; }
-setCh4Delay     { out "set:del:c4 %.2f"                      ; }
-##
-setCh5          { out "set:c5 %{0|1}"                        ; }
-setCh5Delay     { out "set:del:c5 %.2f"                      ; }
-##
-setCh6          { out "set:c6 %{0|1}"                        ; }
-setCh6Delay     { out "set:del:c6 %.2f"                      ; }
-##
-setCh7          { out "set:c7 %{0|1}"                        ; }
-setCh7Delay     { out "set:del:c7 %.2f"                      ; }
-##
-setCh8          { out "set:c8 %{0|1}"                        ; }
-setCh8Delay     { out "set:del:c8 %.2f"                      ; }
-####
-####
+#ReadTimeout = 10000;
+#LockTimeout = 10000;
+#ReplyTimeout = 10000;
+#WriteTimeout = 3000;
+
+getStatus {
+    Separator=","; 
+    out "status?";
+    in "%s";
+    @mismatch {
+    in "Ok\r\n";
+    }
+}
+
+getBWDDiodeStat {
+    out "read:sta:bwd?";
+    in "%{0|1}";
+    @mismatch {
+    in $stausMismatch;
+    }
+}
+
+getBWDIntStat {
+    out "read:bwd?";
+    in "%{0|1}";
+    @mismatch {
+    in $stausMismatch;
+    }
+}
+
+resetBWD {
+    out "reset";
+    in "";
+    @mismatch {
+    in $stausMismatch;
+    }
+}
+
+setBWDThresh {
+    out "set:bwd:lv %i";
+    in "";
+    @mismatch {
+    in $stausMismatch;
+    }
+}
+
+getCh {
+    out "read:c\$1?";
+    in "%d,%*d\r\n";
+    @mismatch {
+    in $stausMismatch;
+    }
+}
+
+setCh {
+    out "set:c\$1 %{0|1}";
+    in "";
+    @mismatch {
+    in $stausMismatch;
+    }
+}
+
+getDelay {
+    out "read:del:c\$1?";
+    in "%f\r\n";
+    @mismatch {
+    in $stausMismatch;
+    }
+}
+
+setDelay {
+    out "set:del:c\$1 %.2f";
+    in "";
+    @mismatch {
+    in $stausMismatch;
+    }
+}
+
 

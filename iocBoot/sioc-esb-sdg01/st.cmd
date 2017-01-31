@@ -16,7 +16,6 @@ drvAsynIPPortConfigure ("L0","ts-esb-06:200x",0,0,0)
 #asynSetTraceIOMask("L0",-1,0x2)
 
 dbLoadRecords("db/sdgElite.db","IOCNAME=${IOC},P=ESB:SDG01,PORT=P0,L=L0,A=0")
-dbLoadRecords("db/sdgElite-8.db","P=ESB:SDG01,PORT=P0,L=L0,A=0")
 
 cd ${TOP}/iocBoot/${IOC}
 iocInit()

@@ -1,4 +1,8 @@
-file sdgElite01.template
+
+file sdgEliteCommon.template
+{{None}}
+
+file sdgEliteChan.template
 {
 pattern{ N, S }
        { 1, A }

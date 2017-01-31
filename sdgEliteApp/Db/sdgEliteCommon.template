@@ -1,0 +1,299 @@
+
+record(stringin, "$(P):SI:IOCNAME") {
+  field(PINI, "1")
+  field(VAL,  "$(IOCNAME)")
+}
+
+record(bi,"$(P):BI:BWD:INT:STATUS"){
+  field(DESC, "BWD Interlock Status")
+  field(DTYP, "stream")
+  #field(SCAN, "10 second")
+  field(INP,  "@$(PROTOFILE) getBWDIntStat $(L) $(A)")
+  field(ZNAM, "Ok")
+  field(ONAM, "Error")
+  field(PINI, "0")
+}
+
+record(bi,"$(P):BI:BWD:DIODE:STATUS"){
+  field(DESC, "BWD Diode Status")
+  field(DTYP, "stream")
+  #field(SCAN, "10 second")
+  field(INP,  "@$(PROTOFILE) getBWDDiodeStat $(L) $(A)")
+  field(ZNAM, "Below Threshold")
+  field(ONAM, "Ok")
+  field(PINI, "0")
+}
+
+record(bo,"$(P):BO:BWD:INT:RESET"){
+  field(DESC, "Reset BWD Interlock")
+  field(DTYP, "stream")
+  field(OUT,  "@$(PROTOFILE) resetBWD $(L) $(A)")
+  #field(FLNK, "$(P):BI:BWD:INT:STATUS")
+}
+
+#--- BWD THreshold --------------------------
+record(ao, "$(P):AO:SC:BWD:THRESHOLD"){
+  field(DESC, "Set BWD Threshold Level")
+  field(OUT,  "$(P):AO:BWD:THRESHOLD PP")
+  field(PREC, "0")
+  field(DRVH, "100")
+  field(DRVL, "0")
+  field(HOPR, "100")
+  field(LOPR, "0")
+  field(LOW,  "50")
+  field(LOLO, "30")
+}
+record(ao, "$(P):AO:BWD:THRESHOLD"){
+  field(SDIS, "$(P):AO:BWD:THRESHOLD:Sync.PACT")
+  field(DISV, "1")
+  field(DTYP, "stream")
+  field(OUT,  "@$(PROTOFILE) setBWDThresh $(L) $(A)")
+  field(PREC, "0")
+  field(DRVH, "100")
+  field(DRVL, "0")
+  field(HOPR, "100")
+  field(LOPR, "0")
+  field(LOW,  "50")
+  field(LOLO, "30")
+}
+record(ao, "$(P):AO:BWD:THRESHOLD:Sync"){
+  field(DOL,  "$(P):AI:BWD:THRESHOLD NPP")
+  field(OMSL, "closed_loop")
+  field(OUT,  "$(P):AO:SC:BWD:THRESHOLD PP")
+  field(PREC, "0")
+}
+record(ai,"$(P):AI:BWD:THRESHOLD"){
+  field(DESC, "BWD Threshold")
+  field(INP,  "$(P):AS:INFO.VALS")
+  field(PREC, "0")
+  field(EGU,  "%")
+  field(FLNK, "$(P):AO:BWD:THRESHOLD:Sync")
+}
+#----------------------------------------------
+
+record(longin,"$(P):LI:BWD1:LEVEL"){
+  field(DESC, "BWD 1 Level")
+  field(INP,  "$(P):AS:INFO.VALJ")
+  field(EGU,  "%")
+  field(LOW,  "70")
+  field(LOLO, "50")
+}
+
+record(longin,"$(P):LI:BWD2:LEVEL"){
+  field(DESC, "BWD 2 Level")
+  field(INP,  "$(P):AS:INFO.VALK")
+  field(EGU,  "%")
+  field(LOW,  "70")
+  field(LOLO, "50")
+}
+
+record(seq, "$(P):SEQ:STATUS"){
+  field(DESC, "")
+  field(LNK1, "$(P):WF:STATUS.PROC")
+  field(DLY1, "0")
+  field(SCAN, "5 second")
+}
+
+record(waveform, "$(P):WF:STATUS"){
+  field(DESC, "Status")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getStatus $(L) $(A)")
+#  field(SCAN, "5 second")
+  field(NELM, "170")
+  field(FTVL, "CHAR")
+  field(PINI, "YES")
+  field(FLNK, "$(P):FO:STATUS1")
+}
+
+record(fanout, "$(P):FO:STATUS1"){
+  field(LNK1, "$(P):AS:CHAN")
+  field(LNK2, "$(P):AS:DELAY")
+  field(LNK3, "$(P):AS:INFO")
+}
+
+record(aSub, "$(P):AS:CHAN"){
+  field(DESC, "unpack channel string")
+  field(SNAM, "asChan")
+  field(INPA, "$(P):WF:STATUS")
+  field(NOA,  "170")
+  field(FTA,  "CHAR")
+  field(FTVA, "LONG") field(NOVA, "1")
+  field(FTVB, "LONG") field(NOVB, "1")
+  field(FTVC, "LONG") field(NOVC, "1")
+  field(FTVD, "LONG") field(NOVD, "1")
+  field(FTVE, "LONG") field(NOVE, "1")
+  field(FTVF, "LONG") field(NOVF, "1")
+  field(FTVG, "LONG") field(NOVG, "1")
+  field(FTVH, "LONG") field(NOVH, "1")
+  field(OUTA, "$(P):BI:CH1 PP")
+  field(OUTB, "$(P):BI:CH2 PP")
+  field(OUTC, "$(P):BI:CH3 PP")
+  field(OUTD, "$(P):BI:CH4 PP")
+  field(OUTE, "$(P):BI:CH5 PP")
+  field(OUTF, "$(P):BI:CH6 PP")
+  field(OUTG, "$(P):BI:CH7 PP")
+  field(OUTH, "$(P):BI:CH8 PP")
+}
+
+record(aSub, "$(P):AS:DELAY"){
+  field(DESC, "unpack delay string")
+  field(SNAM, "asDelay")
+  field(INPA, "$(P):WF:STATUS")
+  field(NOA,  "170")
+  field(FTA,  "CHAR")
+  field(FTVA, "FLOAT") field(NOVA, "1")
+  field(FTVB, "FLOAT") field(NOVB, "1")
+  field(FTVC, "FLOAT") field(NOVC, "1")
+  field(FTVD, "FLOAT") field(NOVD, "1")
+  field(FTVE, "FLOAT") field(NOVE, "1")
+  field(FTVF, "FLOAT") field(NOVF, "1")
+  field(FTVG, "FLOAT") field(NOVG, "1")
+  field(FTVH, "FLOAT") field(NOVH, "1")
+  field(OUTA, "$(P):AI:CH1:DELAY PP")
+  field(OUTB, "$(P):AI:CH2:DELAY PP")
+  field(OUTC, "$(P):AI:CH3:DELAY PP")
+  field(OUTD, "$(P):AI:CH4:DELAY PP")
+  field(OUTE, "$(P):AI:CH5:DELAY PP")
+  field(OUTF, "$(P):AI:CH6:DELAY PP")
+  field(OUTG, "$(P):AI:CH7:DELAY PP")
+  field(OUTH, "$(P):AI:CH8:DELAY PP")
+}
+
+record(aSub, "$(P):AS:INFO"){
+  field(DESC, "unpack info string")
+  field(SNAM, "asInfo")
+  field(INPA, "$(P):WF:STATUS")
+  field(NOA,  "170")
+  field(FTA,  "CHAR")
+  field(FTVA, "LONG")  field(NOVA, "1")
+  field(FTVB, "LONG")  field(NOVB, "1")
+  field(FTVC, "LONG")  field(NOVC, "1")
+  field(FTVD, "LONG")  field(NOVD, "1")
+  field(FTVE, "FLOAT") field(NOVE, "1")
+  field(FTVF, "FLOAT") field(NOVF, "1")
+  field(FTVG, "FLOAT") field(NOVG, "1")
+  field(FTVH, "FLOAT") field(NOVH, "1")
+  field(FTVI, "LONG")  field(NOVI, "1")
+  field(FTVJ, "LONG")  field(NOVJ, "1")
+  field(FTVK, "LONG")  field(NOVK, "1")
+  field(FTVL, "FLOAT") field(NOVL, "1")
+  field(FTVM, "FLOAT") field(NOVM, "1")
+  field(FTVN, "FLOAT") field(NOVN, "1")
+  field(FTVO, "LONG")  field(NOVO, "1")
+  field(FTVP, "LONG")  field(NOVP, "1")
+  field(FTVQ, "LONG")  field(NOVQ, "1")
+  field(FTVR, "LONG")  field(NOVR, "1")
+  field(FTVS, "FLOAT") field(NOVS, "1")
+  field(FTVT, "LONG")  field(NOVT, "1")
+  field(FLNK, "$(P):FO:INFO1")
+}
+
+record(fanout, "$(P):FO:INFO1"){
+  field(LNK1, "$(P):AI:BWD:THRESHOLD")
+  field(LNK2, "$(P):LI:BWD1:LEVEL")
+  field(LNK3, "$(P):LI:BWD2:LEVEL")
+  field(LNK4, "$(P):BI:TRIG:MODE")
+  field(LNK5, "$(P):LI:TRIG:DIV")
+  field(LNK6, "$(P):FO:INFO2")
+}
+
+record(fanout, "$(P):FO:INFO2"){
+  field(LNK1, "$(P):LI:RF:DIV")
+  field(LNK2, "$(P):LI:RF:FREQ:CURR")
+  field(LNK3, "$(P):LI:RF:FREQ:LAST")
+  field(LNK4, "$(P):LI:TRIG:FREQ")
+  field(LNK5, "$(P):LI:ERROR")
+  field(LNK6, "$(P):FO:INFO3")
+}
+
+record(fanout, "$(P):FO:INFO3"){
+  field(LNK1, "$(P):AI:PC1:VOLTAGE")
+  field(LNK2, "$(P):AI:PC1:CURRENT")
+  field(LNK3, "$(P):AI:PC2:VOLTAGE")
+  field(LNK4, "$(P):AI:PC2:CURRENT")
+  field(LNK5, "$(P):BI:GATING")
+}
+
+record(bi,"$(P):BI:TRIG:MODE"){
+  field(DESC, "Trigger Mode")
+  field(INP,  "$(P):AS:INFO.VALP")
+  field(ZNAM, "Continuous")
+  field(ONAM, "Single Shot")
+}
+
+record(longin,"$(P):LI:TRIG:DIV"){
+  field(DESC, "Trigger Divisor")
+  field(INP,  "$(P):AS:INFO.VALA")
+}
+
+record(longin,"$(P):LI:RF:DIV"){
+  field(DESC, "RF Divisor")
+  field(INP,  "$(P):AS:INFO.VALB")
+}
+
+record(longin,"$(P):LI:RF:FREQ:CURR"){
+  field(DESC, "Current RF Frequency")
+  field(INP,  "$(P):AS:INFO.VALL")
+  field(EGU,  "Hz")
+  field(HIGH, "79400000")
+  field(HIHI, "79500000")
+  field(LOW,  "79200000")
+  field(LOLO, "79000000")
+}
+
+record(longin,"$(P):LI:RF:FREQ:LAST"){
+  field(DESC, "Last RF Frequency")
+  field(INP,  "$(P):AS:INFO.VALM")
+  field(EGU,  "Hz")
+}
+
+record(longin,"$(P):LI:TRIG:FREQ"){
+  field(DESC, "Current Trigger Frequency")
+  field(INP,  "$(P):AS:INFO.VALN")
+  field(EGU,  "Hz")
+  field(HIGH, "605")
+  field(HIHI, "610")
+  field(LOW,  "595")
+  field(LOLO, "590")
+}
+
+record(longin,"$(P):LI:ERROR"){
+  field(DESC, "Error Code")
+  field(INP,  "$(P):AS:INFO.VALD")
+}
+
+record(bi,"$(P):BI:GATING"){
+  field(DESC, "Gating Status")
+  field(INP,  "$(P):AS:INFO.VALQ")
+  field(ZNAM, "Off")
+  field(ONAM, "On")
+}
+
+record(ai,"$(P):AI:PC1:VOLTAGE"){
+  field(DESC, "Pockels Cell 1 Voltage")
+  field(INP,  "$(P):AS:INFO.VALE")
+  field(EGU,  "V")
+}
+
+record(ai,"$(P):AI:PC1:CURRENT"){
+  field(DESC, "Pockels Cell 1 Current")
+  field(INP,  "$(P):AS:INFO.VALF")
+  field(EGU,  "mA")
+  field(PREC, "2")
+}
+
+record(ai,"$(P):AI:PC2:VOLTAGE"){
+  field(DESC, "Pockels Cell 2 Voltage")
+  field(INP,  "$(P):AS:INFO.VALG")
+  field(EGU,  "V")
+}
+
+record(ai,"$(P):AI:PC2:CURRENT"){
+  field(DESC, "Pockels Cell 2 Current")
+  field(INP,  "$(P):AS:INFO.VALH")
+  field(EGU,  "mA")
+  field(PREC, "2")
+}
+
+
+###########################################################
